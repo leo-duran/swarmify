@@ -10,6 +10,7 @@ export DOCKER_REPO=registry.swarm.dev:5000
 mkdir -p /etc/docker/certs.d/$DOCKER_REPO
 cp /vagrant/ca.crt /etc/docker/certs.d/$DOCKER_REPO/ca.crt
 
+sudo mkdir /certs
 sudo cp /vagrant/certs/domain.crt /certs
 sudo cp /vagrant/certs/domain.key /certs
 chown vagrant:vagrant /certs

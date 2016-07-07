@@ -53,4 +53,5 @@ deploy
 docker service create --name haproxy -p 80:80 -p 443:443 -p 1234:1234 -e UI=ui:3000 -e CATCHALL=catchall:1111 registry.swarm.dev:5000/haproxy:test1
 ```
 
-docker run --name ui -p 3000:3000 ui:1
+## Discovery
+* What happens if one of the UI containers return a 500?
