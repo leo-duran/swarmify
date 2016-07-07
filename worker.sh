@@ -4,9 +4,9 @@ sudo curl -fsSL https://test.docker.com/ | sh
 sudo docker swarm join 192.168.77.110:2377
 
 # Setup the private pluralsight registry
-echo "10.107.7.144  registry.pluralsight.private" >> /etc/hosts
+echo "192.168.77.110  registry.swarm.dev" >> /etc/hosts
 
-export DOCKER_REPO=registry.pluralsight.private:5000
+export DOCKER_REPO=registry.swarm.dev:5000
 mkdir -p /etc/docker/certs.d/$DOCKER_REPO
 cp /vagrant/ca.crt /etc/docker/certs.d/$DOCKER_REPO/ca.crt
 
