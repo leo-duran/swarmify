@@ -1,57 +1,46 @@
 # A docker swarm sample
 
-This project consists of a 3 node docker swarm and a single server for shared services such as a database, rabbit server, etc.
+This project consists of a 3 node docker swarm for testing swarm mode implemented using VirtualBox and Vagrant.
+
+The following services are being managed by the swarm
 
 * haproxy
-* UI
-* API
+* catch-all
+* ui
 
-## Build
+## Quick start
 
-## Start
-
-### Catch-All
-Build
-```
-docker build -t registry.swarm.dev:5000/catchall:1 .
-docker push registry.swarm.dev:5000/catchall:1
-```
+From the repo folder
 
 ```
-docker service create -p 1111 -e PORT=1111 --replicas=3 --name catchall registry.swarm.dev:5000/catchall:1
+$ vagrant up
+$ vagrant ssh manager1
+$ cd /vagrant
+$ ./deploy.sh
+$ docker service ls
 ```
-
-### UI
-
-Build
-```
-docker build -t registry.swarm.dev:5000/ui:1 .
-docker push registry.swarm.dev:5000/ui:1
-```
+The last step should confirm that all the services have started.
 
 ```
-docker service create -p 3000 -e PORT=3000 --replicas=3 --name ui registry.swarm.dev:5000/ui:1
-
+vagrant@manager1:/vagrant$ docker service ls
+ID            NAME      REPLICAS  IMAGE                                  COMMAND
+0dcty3nrr0ca  haproxy   3/3       registry.swarm.dev:5000/haproxy:test1
+btva0v1ftuki  ui        3/3       registry.swarm.dev:5000/ui:1
+dvaz6tp8ekt0  catchall  3/3       registry.swarm.dev:5000/catchall:1
 ```
 
-### API
+Verify the services from the host. Running the command multiple times will demonstrate the swarm LB by returning a different container host name with each request.
 
+Catch All service
 ```
-docker service create --name api api:1 -p 3000:3000 npm start
-
-```
-### haproxy
-
-Build
-```
-docker build -t registry.swarm.dev:5000/haproxy:test1 .
-docker push registry.swarm.dev:5000/haproxy:test1
+curl --insecure https://192.168.77.110/
 ```
 
-deploy
+UI Service
 ```
-docker service create --name haproxy -p 80:80 -p 443:443 -p 1234:1234 -e UI=ui:3000 -e CATCHALL=catchall:1111 registry.swarm.dev:5000/haproxy:test1
+curl --insecure https://192.168.77.110/ui
 ```
 
 ## Discovery
-* What happens if one of the UI containers return a 500?
+* What happens if one of the UI containers return a 500 consistently from the LB perspective?
+* Does it make sense to run multiple copies of haproxy? One for each node in the swarm?
