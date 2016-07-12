@@ -12,6 +12,8 @@ swarm: (192.168.77.120-122)
 * catch-all
 * ui
 
+![swarmify nodes](swarmify.png)
+
 ## Quick start
 
 From the repo folder
